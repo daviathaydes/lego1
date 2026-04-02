@@ -1,0 +1,61 @@
+---
+title: "Lista I: Desenho de pesquisa"
+date: "14/04/2026"
+author:
+  - name: Davi Athaydes Leite
+    email: davileite@iesp.uerj.br
+abstract: > 
+  Inserir resumo sobre a resolução da lista.
+format:
+  pdf:
+    toc: false
+    number-sections: false
+    colorlinks: true
+    fig-pos: 'H'
+    df-print: kable
+    geometry:
+      - top=25mm
+      - left=20mm
+      - right=20mm
+      - bottom=25mm
+bibliography: ../referencias.bib
+lang: pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+# Pacotes (instale os que ainda não tiver com install.packages())
+library(tidyverse)
+```
+
+# Bloco I – Definição do problema de pesquisa
+
+## Delimitação disciplinar
+
+### Resposta
+
+## Problema de pesquisa
+
+## Definição de conceitos
+
+## Operacionalização de variáveis
+
+## Variáveis
+
+# Bloco II – Teoria e hipóteses
+
+## Teoria causal
+
+## Hipótese principal
+
+## Implicações testáveis ou hipóteses secundárias (mecanismo)
+
+# Bloco III – Montando o desenho
+
+## Desenho de pesquisa
+
+### Referências
+
+::: {#refs}
+:::
