@@ -1,6 +1,6 @@
 ---
 title: "Lista I: Desenho de pesquisa"
-date: "14/04/2026"
+date: "03/04/2026"
 author:
   - name: Davi Athaydes Leite
     email: davileite@iesp.uerj.br
@@ -35,11 +35,25 @@ library(tidyverse)
 
 ### Resposta
 
+Política distributiva. 
+
 ## Problema de pesquisa
+
+### Resposta
+
+Quais fatores políticos influenciam a distribuição do orçamento discricionário federal entre os municípios brasileiros?
 
 ## Definição de conceitos
 
+### Resposta
+
+Em relação à variável dependente do estudo, é possível definir o orçamento discricionário da união como a parcela do Orçamento Geral da União (OGU) cujos recursos não possuem vinculação legal ou institucional obrigatória, conferindo discricionariedade à União [@moutinho_transferencias_2016]. Quanto aos fatores explicativos, é possível exemplificar o alinhamento partidário entre executivo federal e municipal, e o apoio eleitoral conferido ao presidente eleito naquele ente subnacional *(Citar?)*.
+
 ## Operacionalização de variáveis
+
+### Resposta
+
+A variável dependente pode ser mensurada a partir das Transferências Voluntárias da União (TVU) aos municípios, por meio de convênios. É possível construir uma variável contínua para cada município, que represente o montante (em reais) recebido via convênios no ano^[O link para a fonte destes dados pode ser encontrado em: [Convênios da União](https://dados.gov.br/dados/conjuntos-dados/convenios-do-poder-executivo-federal).]. Cada observação é um município, e a unidade de análise o total recebido por esse ente no respectivo ano. O alinhamento partidário pode ser operacionalizado de forma binária (1 = prefeito correligionário; 0 = prefeito de outro partido).
 
 ## Variáveis
 
@@ -54,6 +68,8 @@ library(tidyverse)
 # Bloco III – Montando o desenho
 
 ## Desenho de pesquisa
+
+\newpage
 
 ### Referências
 
