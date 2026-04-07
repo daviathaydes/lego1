@@ -57,9 +57,17 @@ A variável dependente pode ser mensurada a partir das Transferências Voluntár
 
 ## Variáveis
 
+### Resposta
+
+A variável dependente é o montante recebido via convênios no ano pelo município. O alinhamento partidário é um fator explicativo (variável independente). 
+
 # Bloco II – Teoria e hipóteses
 
 ## Teoria causal
+
+### Resposta
+
+Por que fatores políticos como o alinhamento partidário afetariam a distribuição de recursos da União? (Se basear na literatura distributiva - Favorecimento das bases eleitorais - Pereira e Mueller)
 
 ## Hipótese principal
 
