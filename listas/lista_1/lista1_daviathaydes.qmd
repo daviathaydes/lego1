@@ -67,15 +67,73 @@ A variável dependente é o montante recebido via convênios no ano pelo municí
 
 ### Resposta
 
-Por que fatores políticos como o alinhamento partidário afetariam a distribuição de recursos da União? (Se basear na literatura distributiva - Favorecimento das bases eleitorais - Pereira e Mueller)
+Por que o direcionamento do orçamento discricionário da união seria afetado por fatores políticos? O incentivo teórico para acreditarmos em uma relação entre essas variáveis se dá pela possibilidade da distribuição de recursos como forma de beneficiar aliados *(Citar)*. O presidente e sua coalizão  podem favorecer, por exemplo, suas bases eleitorais (entes subnacionais em que o presidente recebeu mais votos) ou seus aliados (prefeitos correligionários) *(Citar)*. Tais recursos podem influenciar no desempenho de um governo municipal, por exemplo, facilitando a implementação da agenda de governo de um prefeito. Se o ente superior possui  discricionariedade para essa distribuição, tanto melhor distribuir para aliados.
 
 ## Hipótese principal
 
+### Resposta
+
+**a)** Uma das hipóteses do estudo é a de que os municípios governados por aliados do governo federal recebem maiores volumes de repasses discricionários da união.
+
+**b)**
+
+```{r}
+#| fig-align: center
+
+set.seed(123) 
+
+n <- 200
+
+ilustracao <- data.frame(
+  prefeito_aliado = rbinom(n, 1, 0.5) # Variável fictícia: prefeito aliado ou não
+)
+
+ilustracao$repasse <- ifelse(
+  ilustracao$prefeito_aliado == 1,
+  rnorm(n, mean = 10000, sd = 2000), # correligionários 1 → valores maiores
+  rnorm(n, mean = 6000, sd = 1500)   # grupo 0 → valores menores
+)
+
+library(ggplot2)
+
+ilustracao |> 
+ggplot()+
+  aes(x = as.character(prefeito_aliado), y = repasse)+
+  geom_jitter(width = 0.1, alpha = 0.6)+
+  stat_summary(fun = "mean",
+               geom = "crossbar",
+               width = .05,
+               color = "firebrick")+
+  labs(x = "Prefeito correligionário (0/1)", y = "Valor ($)")+
+  theme_minimal()
+
+```
+
+
 ## Implicações testáveis ou hipóteses secundárias (mecanismo)
+
+### Resposta
+
+A hipótese se baseia no argumento de que o direcionamento do orçamento discricionário da união  favorece aliados do presidente e sua coalizão. É possível delimitar hipóteses secundárias. De que forma a base de apoio legislativo do prefeito aliado impacta no volume de recursos recebidos? Um prefeito com apoio legislativo tem menos obstáculos para implementar sua agenda. Então, é possível testar a hipótese de que prefeitos aliados com bases de apoio legislativo local são preferidos na distribuição de  recursos.
+
 
 # Bloco III – Montando o desenho
 
 ## Desenho de pesquisa
+
+### Resposta
+
+**a)** Quais fatores políticos influenciam a distribuição do orçamento discricionário federal entre os municípios brasileiros?
+
+**b)** Orçamento Discricionário da União e Alinhamento Partidário
+
+**c)** Montante recebido via convênios no ano pelo município.
+
+**d)** Alinhamento partidário
+
+**e)** Municípios governados por aliados do governo federal recebem maiores volumes de repasses discricionários da união.
+
+**f)** Prefeitos aliados com bases de apoio legislativo locais são preferidos na distribuição de  recursos.
 
 \newpage
 
