@@ -1,11 +1,11 @@
 ---
 title: "Lista I: Desenho de pesquisa"
-date: "03/04/2026"
+date: "10/04/2026"
 author:
   - name: Davi Athaydes Leite
     email: davileite@iesp.uerj.br
 abstract: > 
-  Inserir resumo sobre a resolução da lista.
+  Primeira lista de exercícios de Lego 1. Apesar de não ser exigência, escolhi como tema o que tenho pensado para a dissertação de mestrado. Busquei ser interrogativo na definição do problema de pesquisa, apresentar conceitos com base em uma bibliografia e definir a operacionalização de variáveis de uma forma menos ampla e mais "exata". No bloco II, meu esforço foi justificar por que eu acredito que minhas variáveis explicativas teriam impacto na variável dependente a partir de incentivos teóricos, também baseado em literatura.    
 format:
   pdf:
     toc: false
@@ -41,25 +41,25 @@ Política distributiva.
 
 ### Resposta
 
-Quais fatores políticos influenciam a distribuição do orçamento discricionário federal entre os municípios brasileiros?
+Quais fatores políticos influenciam o direcionamento do orçamento discricionário federal entre os municípios brasileiros?
 
 ## Definição de conceitos
 
 ### Resposta
 
-Em relação à variável dependente do estudo, é possível definir o orçamento discricionário da união como a parcela do Orçamento Geral da União (OGU) cujos recursos não possuem vinculação legal ou institucional obrigatória, conferindo discricionariedade à União [@moutinho_transferencias_2016]. Quanto aos fatores explicativos, é possível exemplificar o alinhamento partidário entre executivo federal e municipal, e o apoio eleitoral conferido ao presidente eleito naquele ente subnacional *(Citar?)*.
+Em relação à variável dependente do estudo, é possível definir o orçamento discricionário da união como a parcela do Orçamento Geral da União (OGU) cujos recursos não possuem vinculação legal ou institucional obrigatória, conferindo discricionariedade à União [@moutinho_transferencias_2016]. Quanto aos fatores explicativos, é possível exemplificar o alinhamento partidário entre executivo federal e municipal, e o apoio eleitoral conferido ao presidente eleito naquele ente subnacional [@soares_condicionantes_2016].
 
 ## Operacionalização de variáveis
 
 ### Resposta
 
-A variável dependente pode ser mensurada a partir das Transferências Voluntárias da União (TVU) aos municípios, por meio de convênios. É possível construir uma variável contínua para cada município, que represente o montante (em reais) recebido via convênios no ano^[O link para a fonte destes dados pode ser encontrado em: [Convênios da União](https://dados.gov.br/dados/conjuntos-dados/convenios-do-poder-executivo-federal).]. Cada observação é um município, e a unidade de análise o total recebido por esse ente no respectivo ano. O alinhamento partidário pode ser operacionalizado de forma binária (1 = prefeito correligionário; 0 = prefeito de outro partido).
+A variável dependente pode ser mensurada a partir das Transferências Voluntárias da União (TVU) aos municípios, por meio de convênios. É possível construir uma variável contínua, que represente o montante (em reais) direcionado ao município via convênios no ano^[Link para a fonte desses dados: [Convênios da União](https://dados.gov.br/dados/conjuntos-dados/convenios-do-poder-executivo-federal).]. Cada observação é um município, e a unidade de análise o total direcionado ao ente no respectivo ano. O alinhamento partidário pode ser operacionalizado de forma binária (1 = prefeito correligionário e 0 = prefeito de outro partido).
 
 ## Variáveis
 
 ### Resposta
 
-A variável dependente é o montante recebido via convênios no ano pelo município. O alinhamento partidário é um fator explicativo (variável independente). 
+A variável dependente é o montante direcionado via convênios ao município. O alinhamento partidário é um fator explicativo (variável independente). 
 
 # Bloco II – Teoria e hipóteses
 
@@ -67,7 +67,7 @@ A variável dependente é o montante recebido via convênios no ano pelo municí
 
 ### Resposta
 
-Por que o direcionamento do orçamento discricionário da união seria afetado por fatores políticos? O incentivo teórico para acreditarmos em uma relação entre essas variáveis se dá pela possibilidade da distribuição de recursos como forma de beneficiar aliados *(Citar)*. O presidente e sua coalizão  podem favorecer, por exemplo, suas bases eleitorais (entes subnacionais em que o presidente recebeu mais votos) ou seus aliados (prefeitos correligionários) *(Citar)*. Tais recursos podem influenciar no desempenho de um governo municipal, por exemplo, facilitando a implementação da agenda de governo de um prefeito. Se o ente superior possui  discricionariedade para essa distribuição, tanto melhor distribuir para aliados.
+Por que o direcionamento das TVU seria afetado por fatores políticos? O incentivo teórico para acreditarmos em uma relação entre essas variáveis se dá pela possibilidade da distribuição de recursos como forma de beneficiar aliados  [@pereira_partidos_2003]. O presidente e sua coalizão podem favorecer suas bases eleitorais (entes subnacionais em que o presidente recebeu mais votos) ou seus aliados (prefeitos correligionários) [@meireles_politica_2024]. Tais recursos podem influenciar no desempenho de um governo municipal facilitando a implementação da agenda do poder executivo. Se o ente superior possui  discricionariedade para essa distribuição, é plausível distribuir para aliados.
 
 ## Hipótese principal
 
@@ -75,7 +75,7 @@ Por que o direcionamento do orçamento discricionário da união seria afetado p
 
 **a)** Uma das hipóteses do estudo é a de que os municípios governados por aliados do governo federal recebem maiores volumes de repasses discricionários da união.
 
-**b)**
+**b)** Como estou descrevendo um possível impacto de uma variável binária em uma variável contínua, penso em um *scatterplot* em que X = Alinhamento partidiário e Y = Montante direcionado *($)*. Seria correto esperar um comportamento como:
 
 ```{r}
 #| fig-align: center
@@ -91,10 +91,8 @@ ilustracao <- data.frame(
 ilustracao$repasse <- ifelse(
   ilustracao$prefeito_aliado == 1,
   rnorm(n, mean = 10000, sd = 2000), # correligionários 1 → valores maiores
-  rnorm(n, mean = 6000, sd = 1500)   # grupo 0 → valores menores
+  rnorm(n, mean = 6000, sd = 1500)   # grupo 0 (outros) → valores menores
 )
-
-library(ggplot2)
 
 ilustracao |> 
 ggplot()+
@@ -123,11 +121,11 @@ A hipótese se baseia no argumento de que o direcionamento do orçamento discric
 
 ### Resposta
 
-**a)** Quais fatores políticos influenciam a distribuição do orçamento discricionário federal entre os municípios brasileiros?
+**a)** Quais fatores políticos influenciam o direcionamento do orçamento discricionário federal entre os municípios brasileiros?
 
 **b)** Orçamento Discricionário da União e Alinhamento Partidário
 
-**c)** Montante recebido via convênios no ano pelo município.
+**c)** Montante direcionado via convênios ao município.
 
 **d)** Alinhamento partidário
 
