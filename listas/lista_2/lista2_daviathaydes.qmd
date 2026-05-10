@@ -40,6 +40,8 @@ showtext_auto()
 
 ## 1. Importação
 
+Importo os bancos normalmente utilizando funções do *Tidyverse*. O único cuidado a mais foi padronizar a variável-chave `issn` do banco `periodicos_ciencias_sociais`, para o *join*. Ao fim, excluo os bancos que não utilizarei mais do meu *environment* com a função `rm()`.
+
 ```{r}
 #| label: tarefa_1
 
@@ -71,6 +73,12 @@ rm(periodicos_ciencias_sociais)
 
 ## 2. Seleção de palavras-chave
 
+Primeiro padronizo a variável `abstract` para minúsculo, depois filtro os casos em que pelo menos uma das minhas palavras-chave aparecem. Minha linha de raciocínio foi:
+
+- "transfer" --> Captura "transferências", "transferência voluntária";
+- "discricionar" --> Captura "discricionário", "discricionária", "discricionários";
+- "coaliz" --> Captura "coalizão", "coalizões".
+
 ```{r}
 #| label: tarefa_2
 
@@ -79,14 +87,18 @@ artigos_selecionados <- artigos_destaque |>
   filter(
     str_detect(
       abstract, paste(c("transfer", "discricionar", 
-                        "coalizao"), collapse = "|")
+                        "coaliz"), collapse = "|")
     )
   )
 ```
 
 \newpage
 
+
+
 ## 3. Evolução ao longo do tempo
+
+A partir dos artigos selecionados, verifico o total de artigos por ano. Como temos uma variável de tempo, me pareceu adequado elaborar um gráfico de linhas com *x* = Ano. 
 
 ```{r}
 #| label: tarefa_3
@@ -121,7 +133,10 @@ artigos_selecionados |>
 ```
 \newpage
 
+
 ## 4. Relevância bibliométrica ao longo do tempo
+
+Nessa questão, após verificar o total e média de citações, preferi pivotar as colunas para ter os valores de ambas as variáveis em uma coluna. Assim, essa coluna de valores é meu *y* no plot, e a coluna que contém a descrição do valor (que chamei de `metrica`) pode ser um termo para um *fill* ou para um *facet_wrap*. Optei pelas facetas.
 
 ```{r}
 #| label: tarefa_4
@@ -139,7 +154,7 @@ artigos_selecionados |>
   pivot_longer(
     cols = c(`Total de citações`,`Média de citações`),
     names_to = "metrica"
-  ) |> 
+  ) |>
   
   # Aqui eu decidi pivotar para ter as duas métricas em uma só coluna
   # Assim uma coluna é meu x, outra o y, e a outra o termo para o facet_wrap
@@ -149,7 +164,7 @@ artigos_selecionados |>
   geom_line(size=1, alpha=0.9, color = "#818589")+
   geom_point(shape=21, color="black", fill="#818589", size=1.5) +
   scale_x_continuous(breaks = seq(2001, 2025, 1))+
-  scale_y_continuous(breaks = seq(0, 130, 15))+
+  scale_y_continuous(breaks = seq(0, 160, 20))+
   labs(x = NULL, y = NULL)+
   facet_wrap(~metrica, nrow = 2)+
   theme_minimal(base_family = "ibm_sans")+
@@ -170,6 +185,7 @@ artigos_selecionados |>
 
 ## 5. Evolução relativa 
 
+Aqui eu utilizo o banco total de artigos. A ideia foi criar uma variável *dummy* a partir do meu critério de seleção de artigos do meu tema. Os artigos que não contemplam a condição recebem *NA* nessa variável, que chamei de `artigos_tema`. Com ela, sou capaz de calcular o total geral de artigos e o total de artigos do tema, em um mesmo `summarize()`.
 
 ```{r}
 #| label: tarefa_5
@@ -220,7 +236,10 @@ artigos_destaque |>
 
 \newpage
 
+
 ## 6. Produção por periódico
+
+Aqui meu cuidado foi deixar o título das colunas formatado corretamente, para o *output* da tabela. Me incomoda um pouco as margens da tabela acompanharem as margens do texto. Aprenderei a corrigir isso.
 
 ```{r}
 #| label: tarefa_6
@@ -238,8 +257,6 @@ producao_periodicos <- artigos_selecionados |>
   rename(
     Revista = revista,
   )
-
-library(kableExtra)
 
 producao_periodicos |> 
   knitr::kable(align = c("l", "c", "c", "c"))
