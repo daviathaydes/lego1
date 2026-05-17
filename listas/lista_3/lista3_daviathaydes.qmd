@@ -1,0 +1,169 @@
+---
+title: "Lista 3: Estatística e amostragem"
+date: "17/05/2026"
+author:
+  - name: Davi Athaydes Leite
+    email: davileite@iesp.uerj.br
+abstract: > 
+  Terceira lista de Lego 1.       
+format:
+  pdf:
+    toc: false
+    number-sections: false
+    colorlinks: true
+    fig-pos: 'H'
+    df-print: kable
+    geometry:
+      - top=25mm
+      - left=20mm
+      - right=20mm
+      - bottom=25mm
+bibliography: ../referencias.bib
+lang: pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+
+library(showtext)
+font_add_google("Lora", "lora")  
+showtext_auto()
+```
+
+\newpage
+
+## 1. Amostragem aleatória simples 
+
+
+```{r}
+ 
+set.seed(123)
+
+load("data/belford_roxo.Rda")
+
+amostra_belford_roxo <- belford_roxo |> 
+  slice_sample(n = 800, replace = FALSE)
+
+amostra_belford_roxo |> 
+  summarise(
+    `Média: Renda mensal` = round(mean(renda_mensal), 2),
+    `Desvio padrão: Renda mensal` = round(sd(renda_mensal), 2)
+  ) |> knitr::kable(align = c("c", "c"))
+
+```
+
+## 2. Tamanho da amostra
+
+```{r}
+
+tamanho_amostras <- c(n800 = 800, n1200 = 1200, n2400 = 2400)
+amostras <- list()
+
+tabela <- belford_roxo |>
+  summarise(Renda = "Média",
+            Base_completa = mean(renda_mensal, na.rm = TRUE))
+
+for (tam in names(tamanho_amostras)) {
+  media_amostra <- belford_roxo |>
+    slice_sample(n = tamanho_amostras[tam], replace = FALSE) |>
+    summarise("Amostra_{tam}" := mean(renda_mensal, na.rm = TRUE))
+  
+  tabela <- bind_cols(tabela, media_amostra)
+}
+
+tabela |> 
+  mutate(across(where(is.numeric), \(x) round(x,2))) |> 
+  knitr::kable(align = c("l", "c", "c", "c", "c"))
+
+```
+
+## 3. Distribuição amostral da média
+
+```{r}
+#| fig-align: "center"
+#| fig-cap: "Distribuição Amostral da Média da Renda Mensal"
+
+medias <- tibble()
+
+for (i in 1:1000) {
+  media_i <- belford_roxo |>
+    slice_sample(n = 800, replace = FALSE) |>
+    summarise(media = mean(renda_mensal, na.rm = TRUE))
+  
+  medias <- bind_rows(medias, media_i)
+}
+
+medias |> 
+  ggplot(aes(x = media))+
+  geom_histogram(bins = 30, fill = "steelblue4", color = "white")+
+  geom_vline(xintercept = mean(belford_roxo$renda_mensal),
+             color = "red", linewidth = .5, linetype = "dashed")+
+  labs(
+    x = "Média da Renda Mensal (R$)",
+    y = "Frequência",
+    caption = "Linha vermelha = Média populacional"
+  )+
+  theme_minimal(base_family = "lora")
+
+```
+
+## 4. Comparação de renda
+
+```{r}
+amostra_br <- belford_roxo |> 
+  filter(cor_raca %in% c("Branca", "Preta")) |> 
+  slice_sample(n = 2000, replace = FALSE)
+
+amostra_br |> 
+  group_by(cor_raca) |> 
+  summarise(
+    `Renda média` = round(mean(renda_mensal), 2),
+     n = n()
+  ) |> knitr::kable(align = c("l", "c", "c"))
+  
+
+```
+
+## 5. Inferência randomizada
+
+```{r}
+#| fig-align: "center"
+#| fig-cap: "Distribuição nula da diferença de renda média entre pessoas pretas e brancas."
+#| label: fig-inferencia
+
+observado <- amostra_br |> 
+  group_by(cor_raca) |> 
+  summarise(
+    renda_media = round(mean(renda_mensal), 2),
+    n = n()
+  ) |> 
+  summarise(dif = diff(renda_media)) |> 
+  pull(dif)                        
+
+
+nulo <- tibble()
+
+for (i in 1:1000) {
+  dif_i <- amostra_br |> 
+    mutate(cor_raca = sample(cor_raca, replace = FALSE)) |>
+    group_by(cor_raca) |> 
+    summarise(renda_media = mean(renda_mensal)) |> 
+    summarise(dif = diff(renda_media))
+  nulo <- bind_rows(nulo, dif_i)
+}
+
+nulo |>
+  ggplot(aes(x = dif))+
+  geom_histogram(bins = 30, fill = "steelblue4", color = "white")+
+  geom_vline(xintercept = observado,
+             color = "red", linewidth = .5, linetype = "dashed")+
+  labs(
+    x = "Diferença de Renda Média (Preta - Branca)",
+    y = "Frequência"
+  ) +
+  theme_minimal(base_family = "lora")
+
+```
+
