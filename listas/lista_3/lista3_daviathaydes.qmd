@@ -1,11 +1,11 @@
 ---
 title: "Lista 3: Estatística e amostragem"
-date: "17/05/2026"
+date: "20/05/2026"
 author:
   - name: Davi Athaydes Leite
     email: davileite@iesp.uerj.br
 abstract: > 
-  Terceira lista de Lego 1.       
+  Terceira lista de Lego 1. Nesse exercício, busquei utilizar os loops da maneira que o Fernando utiliza nas aulas. As funções do tidyverse foram suficientes para solucionar os problemas. Na última questão fiz comentários mais interpretativos, além da explicação do código. No mais, os gráficos estão bonitos!        
 format:
   pdf:
     toc: false
@@ -36,6 +36,7 @@ showtext_auto()
 
 ## 1. Amostragem aleatória simples 
 
+Começo garantindo a replicabilidade com o `set_seed()`. Importo o banco, extraio uma amostra e calculo a média e sd, reportados em uma tabela. Utilizo o `summarise()` Para calcular as medidas tanto da amostra quanto da população. Utilizo o `kable()` para deixar bonito.  
 
 ```{r}
  
@@ -48,18 +49,24 @@ amostra_belford_roxo <- belford_roxo |>
 
 amostra_belford_roxo |> 
   summarise(
-    `Média: Renda mensal` = round(mean(renda_mensal), 2),
-    `Desvio padrão: Renda mensal` = round(sd(renda_mensal), 2)
-  ) |> knitr::kable(align = c("c", "c"))
+    `$\\bar{x}$` = round(mean(renda_mensal), 2),
+    `$s$`        = round(sd(renda_mensal), 2),
+    `$\\mu$`     = round(mean(belford_roxo$renda_mensal), 2),
+    `$\\sigma$`  = round(sd(belford_roxo$renda_mensal), 2)
+  ) |> knitr::kable(
+    caption = "Medidas resumo: Renda mensal de Belford Roxo",
+    align   = "cccc"
+  )
 
 ```
 
 ## 2. Tamanho da amostra
 
+Começo criando um vetor com os tamanhos das amostras para fazer um `loop()`; No loop, itero sobre o tamanho de cada amostra o calculo da média de renda mensal. Depois, junto em uma tabela a média da população que calculei no início e as médias das amostras, e reporto em uma tabela. 
+
 ```{r}
 
 tamanho_amostras <- c(n800 = 800, n1200 = 1200, n2400 = 2400)
-amostras <- list()
 
 tabela <- belford_roxo |>
   summarise(Renda = "Média",
@@ -80,6 +87,8 @@ tabela |>
 ```
 
 ## 3. Distribuição amostral da média
+
+Primeiro faço um `dataframe` em branco. No `loop()`, extraio a média de 1000 amostras de 800 casos e atribuo no banco.
 
 ```{r}
 #| fig-align: "center"
@@ -111,6 +120,8 @@ medias |>
 
 ## 4. Comparação de renda
 
+O cuidado aqui foi filtrar as outras cores/raças.
+
 ```{r}
 amostra_br <- belford_roxo |> 
   filter(cor_raca %in% c("Branca", "Preta")) |> 
@@ -128,6 +139,10 @@ amostra_br |>
 
 ## 5. Inferência randomizada
 
+Sobre o código: Faço um objeto com a diferença do resultado do exercício anterior. No `loop()`, o cuidado foi aleatorizar os valores da variável de cor/raça.
+
+A diferença que observamos na amostra do exercício anterior aparece na cauda da distribuição nula, isto é, ela raramente ocorre quando embaralhamos os valores da variável de raça de forma aleatória. A diferença observada aparecer na cauda da distribuição nula nos diz que uma proporção bem pequena das simulações produziram diferença similar, indício de que a diferença entre a renda média entre brancos e pretos não é algo do acaso.
+
 ```{r}
 #| fig-align: "center"
 #| fig-cap: "Distribuição nula da diferença de renda média entre pessoas pretas e brancas."
@@ -136,8 +151,7 @@ amostra_br |>
 observado <- amostra_br |> 
   group_by(cor_raca) |> 
   summarise(
-    renda_media = round(mean(renda_mensal), 2),
-    n = n()
+    renda_media = mean(renda_mensal),
   ) |> 
   summarise(dif = diff(renda_media)) |> 
   pull(dif)                        
