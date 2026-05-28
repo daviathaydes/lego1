@@ -5,7 +5,7 @@ author:
   - name: Davi Athaydes Leite
     email: davileite@iesp.uerj.br
 abstract: > 
-  Terceira lista de Lego 1. Nesse exercício, busquei utilizar os loops da maneira que o Fernando utiliza nas aulas. As funções do tidyverse foram suficientes para solucionar os problemas. Na última questão fiz comentários mais interpretativos, além da explicação do código. No mais, os gráficos estão bonitos!        
+  Terceira lista de Lego 1. Nesse exercício, busquei utilizar os loops da maneira que o Fernando utiliza nas aulas. As funções do tidyverse foram suficientes para solucionar os problemas. Na última questão fiz comentários mais interpretativos, além da explicação do código.        
 format:
   pdf:
     toc: false
