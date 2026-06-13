@@ -119,7 +119,7 @@ bolsas_internacionais_capes_2012 |>
 
 ### b)
 
-Incluímos uma variável independente categórica nesse modelo. Por padrão, o R toma uma categoria como referência, e calcula os coeficientes dos valores das categorias em comparação à categoria de base. O intercepto é exatamente a média da categoria de referência, Centro-oeste (5745.22). Os valores dos coeficientes das outras categorias indicam o impacto do pertencimento à outra região no valor da bolsa, em comparação ao valor médio do Centro-oeste. Por exemplo, pertencer ao nordeste representa 284,56 a menos no valor da bolsa. Calculando os t-valores (Valor beta / Erro padrão), vemos que a única região que tem efeito significativo é o norte, que representa 831,67 no valor da bolsa.
+Incluímos uma variável independente categórica nesse modelo. Por padrão, o R toma uma categoria como referência, e calcula os coeficientes dos valores das categorias em comparação à categoria de base. O intercepto é exatamente a média da categoria de referência, Centro-oeste (5745.22). Os valores dos coeficientes das outras categorias indicam o impacto do pertencimento à outra região no valor da bolsa, em comparação ao valor médio do Centro-oeste. Por exemplo, pertencer ao nordeste representa 284,56 a menos no valor da bolsa. Calculando os t-valores (Valor beta / Erro padrão), vemos que a única região que tem efeito significativo é o norte, que representa 831,67 a menos no valor da bolsa.
 
 ```{r}
 #| tbl-cap: Coeficientes do modelo 2
