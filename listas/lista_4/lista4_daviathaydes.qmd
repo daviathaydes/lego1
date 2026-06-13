@@ -1,0 +1,168 @@
+---
+title: "Lista 4: Regressão linear"
+date: "12/06/2026"
+author:
+  - name: Davi Athaydes Leite
+    email: davileite@iesp.uerj.br
+abstract: > 
+  Lista 4 de Lego 1. Busquei interpretar os resultados dos modelos de acordo com as explicações do Fernando em aula. Na questão 2, incluí um geom_text para ilustrar as médias no gráfico de barras, para observar o valor do intercepto do modelo. Na última questão, fiz uso da função plot_model(), do pacote sjPlot, para fazer um plot que ilustra o efeito das duas variáveis independentes.         
+format:
+  pdf:
+    toc: false
+    number-sections: false
+    colorlinks: true
+    fig-pos: 'H'
+    df-print: kable
+    geometry:
+      - top=25mm
+      - left=20mm
+      - right=20mm
+      - bottom=25mm
+bibliography: ../referencias.bib
+lang: pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(readxl)
+library(showtext)
+library(modelsummary)
+
+font_add_google("Lora", "lora")  
+showtext_auto()
+
+## ativar showtext
+showtext_auto()
+
+bolsas_internacionais_capes_2012 <- read_excel("data/bolsas_internacionais_capes_2012.xlsx")
+
+```
+
+\newpage
+
+## 1. Regressão linear simples
+
+## a)
+
+```{r}
+#| fig-cap: "Scatterplot: Valor recebido total e estadia em meses"
+#| fig-align: center
+
+modelo_1 <- lm(valor_recebido_total ~ estadia_em_meses,
+             data = bolsas_internacionais_capes_2012)
+
+
+bolsas_internacionais_capes_2012 |> 
+  ggplot()+
+  aes(x = estadia_em_meses, y = valor_recebido_total)+
+  geom_point(shape = 21)+
+  geom_smooth(method = "lm", se = F, color = "darkgray")+
+  labs(
+    x = "Estadia em meses",
+    y = "Valor recebido total" 
+  )+
+  theme_minimal(base_family = "lora")
+  
+
+```
+
+
+### b)
+
+A constante (intercepto) nos mostra que a reta do modelo, quando x = 0, parte do valor y = -313. Sabemos que não há interpretação substantiva quanto a isso, pois uma bolsa de 0 meses de tempo de estadia não é plausível. O coeficiente beta de 507.959 nos diz que, para cada mês de estadia, o modelo prevê um aumento de R$507.95 no valor recebido.  
+
+```{r}
+#| tbl-cap: Coeficientes do modelo 1
+
+modelsummary(modelo_1, float = FALSE)
+
+```
+
+## 2. Variáveis independentes categóricas
+
+### a)
+
+
+```{r}
+#| fig-cap: "Média do valor recebido total por região"
+#| fig-align: center
+
+modelo_2 <- lm(valor_recebido_total ~ regiao,
+             data = bolsas_internacionais_capes_2012)
+
+bolsas_internacionais_capes_2012 |> 
+  group_by(regiao) |> 
+  summarise(valor_medio = mean(valor_recebido_total)) |> 
+  
+  ggplot()+
+  aes(x = regiao, y = valor_medio)+
+  geom_col(fill = "darkgray", color = "black", width = .8)+
+  geom_text(
+    aes(label = paste0(round(valor_medio, 2))),
+    position = position_dodge(width = .7),
+    size = 2.5,
+    hjust = -.25
+  )+
+  ylim(0,7000)+
+  coord_flip()+
+  labs(
+    x = "",
+    y = "Valor recebido total (média)" 
+  )+
+  theme_minimal(base_family = "lora")
+  
+
+
+```
+
+### b)
+
+Incluímos uma variável independente categórica nesse modelo. Por padrão, o R toma uma categoria como referência, e calcula os coeficientes dos valores das categorias em comparação à categoria de base. O intercepto é exatamente a média da categoria de referência, Centro-oeste (5745.22). Os valores dos coeficientes das outras categorias indicam o impacto do pertencimento à outra região no valor da bolsa, em comparação ao valor médio do Centro-oeste. Por exemplo, pertencer ao nordeste representa 284,56 a menos no valor da bolsa. Calculando os t-valores (Valor beta / Erro padrão), vemos que a única região que tem efeito significativo é o norte, que representa 831,67 no valor da bolsa.
+
+```{r}
+#| tbl-cap: Coeficientes do modelo 2
+
+modelsummary(modelo_2, float = FALSE)
+
+```
+
+\newpage
+
+## 3. Relação multivariada
+
+### a)
+
+A cada mês adicional de estadia, o valor recebido aumenta em média 508.52, controlando pela região. O t-valor de 70.15, calculado a partir da razão entre o coeficiente beta e o erro padrão, demonstra que este é o preditor mais forte nesse modelo, reforçado também pelo p-valor inferior à 0.001. Calculando essa mesma razão entre Beta e Erro padrão para os outros preditores, a região não parece afetar o valor da bolsa. Comparado ao modelo anterior, por exemplo, o pertencimento a região norte fazia diferença. O controle pelo tempo de estadia corrigiu esse efeito.
+
+```{r}
+#| tbl-cap: Coeficientes do modelo 3
+
+modelo_3 <- lm(valor_recebido_total ~ regiao + estadia_em_meses,
+             data = bolsas_internacionais_capes_2012)
+
+modelsummary(modelo_3,statistic = c("std.error", "p.value"), float = FALSE)
+
+```
+
+### b)
+
+```{r}
+#| fig-cap: "Valores preditos: Impacto do tempo de estadia no valor recebido, por região"
+#| fig-align: center
+
+library(sjPlot)
+
+plot_model(modelo_3, type = "pred", terms = c("estadia_em_meses", "regiao"))+
+  labs(
+    title = NULL,
+    x = "Estadia em meses",
+    y = "Valor recebido total",
+    color = "Região"
+  )+
+  theme_minimal(base_family = "lora")+
+    theme(legend.position = "bottom")
+
+```
+
